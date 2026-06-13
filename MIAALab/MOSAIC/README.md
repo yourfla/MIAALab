@@ -55,14 +55,17 @@ Set the dataset path in the corresponding config under `configs/`
 
 ## Usage
 
-MOSAIC is selected with `--model_name MOSAIC`, and trained with a two-stage
-protocol: a base stage that fits the U-Net, prior/posterior encoders and
-segmentation head, followed by an auxiliary stage that trains SC-ECRD, EBF and
-SABR with the base network frozen. The example below uses LIDC-IDRI
-(`--mask_num 4`, four-fold cross-validation); NPC-170 follows the same steps with
-`configs/params_npc.yaml`.
+MOSAIC is selected with `--model_name MOSAIC` and trained with a two-stage
+protocol. The first stage fits the base segmentation network (U-Net,
+prior/posterior encoders and segmentation head) and saves a base checkpoint. The
+second stage loads that base checkpoint, keeps the base network frozen, and
+trains the three auxiliary modules (SC-ECRD, EBF and SABR) on top of it, so the
+modules are optimized without altering the base representation. The example below
+uses LIDC-IDRI (`--mask_num 4`, four-fold cross-validation); NPC-170 follows the
+same steps with `configs/params_npc.yaml`.
 
-**1. Base stage.** Train the base segmentation network.
+**Stage 1 — base network.** Train the base segmentation network and save its
+checkpoint.
 
 ```bash
 python train.py --config configs/params_lidc.yaml \
@@ -70,16 +73,17 @@ python train.py --config configs/params_lidc.yaml \
     --mask_num 4 --save_path ./output/lidc/
 ```
 
-**2. Auxiliary stage.** Freeze the base network and train the three modules
-(SC-ECRD, EBF, SABR).
+**Stage 2 — auxiliary modules.** Load the Stage 1 base checkpoint, freeze the
+base network, and train SC-ECRD, EBF and SABR.
 
 ```bash
 python train.py --config configs/params_lidc.yaml \
     --model_name MOSAIC --stage aux \
+    --base_ckpt ./output/lidc/ \
     --mask_num 4 --save_path ./output/lidc/
 ```
 
-**3. Personalization (optional).** Fine-tune the per-annotator heads.
+**Stage 3 — personalization (optional).** Fine-tune the per-annotator heads.
 
 ```bash
 python train.py --config configs/params_lidc.yaml \
@@ -87,7 +91,7 @@ python train.py --config configs/params_lidc.yaml \
     --mask_num 4 --save_path ./output/lidc/
 ```
 
-**4. Evaluation.** Report diversity (GED), personalization (Dice_match) and the
+**Evaluation.** Report diversity (GED), personalization (Dice_match) and the
 uncertainty metrics (NCC, AUDC, DSD, BoundaryDice).
 
 ```bash
