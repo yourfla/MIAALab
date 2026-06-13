@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Checkpoints / models / data (not distributed)
+*.pth
+*.pt
+*.ckpt
+models_ckpt/
+dataset/
+data/
+*.pkl
+*.h5
+
+# Outputs / logs / figures
+outputs/
+results/
+logs/
+*.log
+*.png
+*.jpg
+*.pdf
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

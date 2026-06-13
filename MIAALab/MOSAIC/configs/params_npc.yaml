@@ -1,0 +1,17 @@
+DATASET: NPC
+DATA_PATH: ./dataset         # dataset root directory
+SPLIT_DIR: training_2d       # optional, default split directory
+DROP_EMPTY: true             # optional, drop empty-mask slices
+
+RANDOM_SEED: 1337
+
+MODEL_DIR: '../models/'
+
+INPUT_CHANNEL: 3
+OUTPUT_CHANNEL: 1
+TRAIN_BATCHSIZE: 12
+VAL_BATCHSIZE: 1 # fixed
+
+PRT_LOSS: False
+VISUALIZE: False
+TEST_SAVE: True
