@@ -64,7 +64,7 @@ modules are optimized without altering the base representation. The example belo
 uses LIDC-IDRI (`--mask_num 4`, four-fold cross-validation); NPC-170 follows the
 same steps with `configs/params_npc.yaml`.
 
-**Stage 1 — base network.** Train the base segmentation network and save its
+**Stage 0 — base network.** Train the base segmentation network and save its
 checkpoint.
 
 ```bash
@@ -73,7 +73,7 @@ python train.py --config configs/params_lidc.yaml \
     --mask_num 4 --save_path ./output/lidc/
 ```
 
-**Stage 2 — auxiliary modules.** Load the Stage 1 base checkpoint, freeze the
+**Stage 1 — auxiliary modules.** Load the Stage 1 base checkpoint, freeze the
 base network, and train SC-ECRD, EBF and SABR.
 
 ```bash
@@ -83,7 +83,7 @@ python train.py --config configs/params_lidc.yaml \
     --mask_num 4 --save_path ./output/lidc/
 ```
 
-**Stage 3 — personalization (optional).** Fine-tune the per-annotator heads.
+**Stage 2 — personalization (optional).** Fine-tune the per-annotator heads.
 
 ```bash
 python train.py --config configs/params_lidc.yaml \
